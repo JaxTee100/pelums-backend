@@ -45,9 +45,24 @@ const updateInvoice = async (req, res) => {
     res.status(400).json({ message: error.message });
   }         
 }
+const deleteInvoice = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Invoice.findByIdAndDelete(id);
 
+    if (!deleted) {
+      return res.status(404).json({ message: 'Invoice not found' });
+    }
+
+    res.status(200).json({ message: 'Invoice deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting invoice:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 module.exports = {
   createInvoice,
   getInvoices,
   getInvoiceById,
-  updateInvoice,}
+  updateInvoice,
+  deleteInvoice}
